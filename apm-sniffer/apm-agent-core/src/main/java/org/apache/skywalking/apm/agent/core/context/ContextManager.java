@@ -23,8 +23,13 @@ import org.apache.skywalking.apm.agent.core.conf.RemoteDownstreamConfig;
 import org.apache.skywalking.apm.agent.core.context.trace.*;
 import org.apache.skywalking.apm.agent.core.dictionary.DictionaryUtil;
 import org.apache.skywalking.apm.agent.core.logging.api.*;
+import org.apache.skywalking.apm.agent.core.plugin.loader.InterceptorInstanceLoader;
 import org.apache.skywalking.apm.agent.core.sampling.SamplingService;
 import org.apache.skywalking.apm.util.StringUtil;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 import static org.apache.skywalking.apm.agent.core.conf.Config.Agent.OPERATION_NAME_THRESHOLD;
 
@@ -98,12 +103,68 @@ public class ContextManager implements BootService {
             context = getOrCreate(operationName, true);
             span = context.createEntrySpan(operationName);
             context.extract(carrier);
+            setMdc(context.getReadableGlobalTraceId());
         } else {
             context = getOrCreate(operationName, false);
+            setMdc(context.getReadableGlobalTraceId());
             span = context.createEntrySpan(operationName);
         }
         return span;
     }
+
+    private static final String ORG_SLF4J_MDC = "org.slf4j.MDC";
+    private static final String PUT = "put";
+    private static final String TRACE_ID = "traceId";
+    private static final String ORG_APACHE_LOG4J_MDC = "org.apache.log4j.MDC";
+    private static final String SP_1 = "-";
+
+    public static void setMdc(String id) {
+        if ("Ignored Trace".equals(id)) {
+            return;
+        }
+        try {
+            Map<ClassLoader,ClassLoader> classLoaderClassLoaderMap = InterceptorInstanceLoader.EXTEND_PLUGIN_CLASSLOADERS;
+            for (ClassLoader classLoader : classLoaderClassLoaderMap.keySet()) {
+                String classLoaderName = classLoader.getClass().getName();
+                try {
+                    Object outObj = InterceptorInstanceLoader.CLASSLOADERS_METHOD.get(ORG_SLF4J_MDC.concat(SP_1).concat(classLoaderName));
+                    if (outObj == null) {
+                        Class clazz1 = classLoader.loadClass(ORG_SLF4J_MDC);
+                        Constructor con = clazz1.getDeclaredConstructor(new Class[0]);
+                        con.setAccessible(true);
+                        outObj = con.newInstance(new Object[0]);
+                        InterceptorInstanceLoader.CLASSLOADERS_METHOD.put(ORG_SLF4J_MDC.concat(SP_1).concat(classLoaderName),outObj);
+                    }
+                    Method method = outObj.getClass().getDeclaredMethod(PUT, new Class[] {String.class, String.class});
+                    method.setAccessible(true);
+                    Object localObject1 = method.invoke(outObj, new Object[] {TRACE_ID, id});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error(e.getMessage());
+                }
+                try {
+                    Object outObj = InterceptorInstanceLoader.CLASSLOADERS_METHOD.get(ORG_APACHE_LOG4J_MDC.concat(SP_1).concat(classLoaderName));
+                    if (outObj == null) {
+                        Class clazz1 = classLoader.loadClass(ORG_APACHE_LOG4J_MDC);
+                        Constructor con = clazz1.getDeclaredConstructor(new Class[0]);
+                        con.setAccessible(true);
+                        outObj = con.newInstance(new Object[0]);
+                        InterceptorInstanceLoader.CLASSLOADERS_METHOD.put(ORG_APACHE_LOG4J_MDC.concat(SP_1).concat(classLoaderName),outObj);
+                    }
+                    Method method = outObj.getClass().getDeclaredMethod(PUT, new Class[] {String.class, Object.class});
+                    method.setAccessible(true);
+                    Object localObject1 = method.invoke(outObj, new Object[] {TRACE_ID, id});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.error(e.getMessage());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+    }
+
 
     public static AbstractSpan createLocalSpan(String operationName) {
         operationName = StringUtil.cut(operationName, OPERATION_NAME_THRESHOLD);

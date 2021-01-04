@@ -20,13 +20,11 @@ package org.apache.skywalking.apm.agent.core.jvm;
 
 import io.grpc.Channel;
 import java.util.LinkedList;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import org.apache.skywalking.apm.agent.core.boot.BootService;
 import org.apache.skywalking.apm.agent.core.boot.DefaultImplementor;
-import org.apache.skywalking.apm.agent.core.boot.DefaultNamedThreadFactory;
 import org.apache.skywalking.apm.agent.core.boot.ServiceManager;
 import org.apache.skywalking.apm.agent.core.commands.CommandService;
 import org.apache.skywalking.apm.agent.core.conf.Config;
@@ -45,7 +43,6 @@ import org.apache.skywalking.apm.network.common.Commands;
 import org.apache.skywalking.apm.network.language.agent.JVMMetric;
 import org.apache.skywalking.apm.network.language.agent.v2.JVMMetricCollection;
 import org.apache.skywalking.apm.network.language.agent.v2.JVMMetricReportServiceGrpc;
-import org.apache.skywalking.apm.util.RunnableWithExceptionProtection;
 
 import static org.apache.skywalking.apm.agent.core.conf.Config.Collector.GRPC_UPSTREAM_TIMEOUT;
 
@@ -72,21 +69,22 @@ public class JVMService implements BootService, Runnable {
 
     @Override
     public void boot() throws Throwable {
-        collectMetricFuture = Executors
-            .newSingleThreadScheduledExecutor(new DefaultNamedThreadFactory("JVMService-produce"))
-            .scheduleAtFixedRate(new RunnableWithExceptionProtection(this, new RunnableWithExceptionProtection.CallbackWhenException() {
-                @Override public void handle(Throwable t) {
-                    logger.error("JVMService produces metrics failure.", t);
-                }
-            }), 0, 1, TimeUnit.SECONDS);
-        sendMetricFuture = Executors
-            .newSingleThreadScheduledExecutor(new DefaultNamedThreadFactory("JVMService-consume"))
-            .scheduleAtFixedRate(new RunnableWithExceptionProtection(sender, new RunnableWithExceptionProtection.CallbackWhenException() {
-                @Override public void handle(Throwable t) {
-                    logger.error("JVMService consumes and upload failure.", t);
-                }
-            }
-            ), 0, 1, TimeUnit.SECONDS);
+        //JVM相关信息不再进行收集
+//        collectMetricFuture = Executors
+//            .newSingleThreadScheduledExecutor(new DefaultNamedThreadFactory("JVMService-produce"))
+//            .scheduleAtFixedRate(new RunnableWithExceptionProtection(this, new RunnableWithExceptionProtection.CallbackWhenException() {
+//                @Override public void handle(Throwable t) {
+//                    logger.error("JVMService produces metrics failure.", t);
+//                }
+//            }), 0, 120, TimeUnit.SECONDS);
+//        sendMetricFuture = Executors
+//            .newSingleThreadScheduledExecutor(new DefaultNamedThreadFactory("JVMService-consume"))
+//            .scheduleAtFixedRate(new RunnableWithExceptionProtection(sender, new RunnableWithExceptionProtection.CallbackWhenException() {
+//                @Override public void handle(Throwable t) {
+//                    logger.error("JVMService consumes and upload failure.", t);
+//                }
+//            }
+//            ), 0, 120, TimeUnit.SECONDS);
     }
 
     @Override

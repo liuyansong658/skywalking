@@ -124,11 +124,11 @@ public class Config {
         /**
          * grpc channel status check interval
          */
-        public static long GRPC_CHANNEL_CHECK_INTERVAL = 30;
+        public static long GRPC_CHANNEL_CHECK_INTERVAL = 60;
         /**
          * service and endpoint registry check interval
          */
-        public static long APP_AND_SERVICE_REGISTER_CHECK_INTERVAL = 3;
+        public static long APP_AND_SERVICE_REGISTER_CHECK_INTERVAL = 60;
         /**
          * Collector skywalking trace receiver service addresses.
          */

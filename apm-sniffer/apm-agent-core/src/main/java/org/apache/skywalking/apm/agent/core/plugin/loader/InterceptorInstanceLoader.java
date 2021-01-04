@@ -38,8 +38,8 @@ public class InterceptorInstanceLoader {
 
     private static ConcurrentHashMap<String, Object> INSTANCE_CACHE = new ConcurrentHashMap<String, Object>();
     private static ReentrantLock INSTANCE_LOAD_LOCK = new ReentrantLock();
-    private static Map<ClassLoader, ClassLoader> EXTEND_PLUGIN_CLASSLOADERS = new HashMap<ClassLoader, ClassLoader>();
-
+    public static Map<ClassLoader, ClassLoader> EXTEND_PLUGIN_CLASSLOADERS = new HashMap<ClassLoader, ClassLoader>();
+    public static Map<String, Object> CLASSLOADERS_METHOD = new HashMap<String, Object>();
     /**
      * Load an instance of interceptor, and keep it singleton.
      * Create {@link AgentClassLoader} for each targetClassLoader, as an extend classloader.

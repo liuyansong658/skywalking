@@ -49,6 +49,14 @@ public abstract class DistributedTraceId {
         return id.encode();
     }
 
+    public ID getId() {
+        return id;
+    }
+
+    public void setId(ID id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return id.toString();

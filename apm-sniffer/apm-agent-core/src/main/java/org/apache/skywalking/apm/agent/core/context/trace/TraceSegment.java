@@ -81,7 +81,10 @@ public class TraceSegment {
         this.traceSegmentId = GlobalIdGenerator.generate();
         this.spans = new LinkedList<AbstractTracingSpan>();
         this.relatedGlobalTraces = new DistributedTraceIds();
-        this.relatedGlobalTraces.append(new NewDistributedTraceId());
+        NewDistributedTraceId newDistributedTraceId = new NewDistributedTraceId();
+        this.relatedGlobalTraces.append(newDistributedTraceId);
+        //use relatedGlobalTraces
+        this.traceSegmentId = newDistributedTraceId.getId();
         this.createTime = System.currentTimeMillis();
     }
 
@@ -104,6 +107,8 @@ public class TraceSegment {
      */
     public void relatedGlobalTraces(DistributedTraceId distributedTraceId) {
         relatedGlobalTraces.append(distributedTraceId);
+        //use primaryDistributedTraceId
+        traceSegmentId = distributedTraceId.getId();
     }
 
     /**

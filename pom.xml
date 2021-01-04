@@ -489,7 +489,7 @@
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
                     <configLocation>apm-checkstyle/checkStyle.xml</configLocation>
-                    <headerLocation>apm-checkstyle/CHECKSTYLE_HEAD</headerLocation>
+<!--                    <headerLocation>apm-checkstyle/CHECKSTYLE_HEAD</headerLocation>-->
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
