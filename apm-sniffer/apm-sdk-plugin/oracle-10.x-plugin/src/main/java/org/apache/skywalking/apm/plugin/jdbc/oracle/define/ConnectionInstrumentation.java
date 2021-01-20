@@ -15,8 +15,7 @@
  * limitations under the License.
  *
  */
-
-package io.skywalking.apm.plugin.jdbc.oracle.define;
+package org.apache.skywalking.apm.plugin.jdbc.oracle.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;

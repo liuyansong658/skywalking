@@ -15,19 +15,17 @@
  * limitations under the License.
  *
  */
-
-package io.skywalking.apm.plugin.jdbc.oracle.define;
+package org.apache.skywalking.apm.plugin.jdbc.oracle.define;
 
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.InstanceMethodsInterceptPoint;
 import org.apache.skywalking.apm.plugin.jdbc.PSSetterDefinitionOfJDBCInstrumentation;
-
 /**
  * @author liuyansong
  */
-public class OraclePreparedStatementIgnoredSetterInstrumentation extends OraclePrepareStatementInstrumentation {
-  
+public class OraclePrepareStatementSetterInstrumentation extends OraclePrepareStatementInstrumentation {
+
     @Override
-    public final InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {
-        return new InstanceMethodsInterceptPoint[]{new PSSetterDefinitionOfJDBCInstrumentation(true)};
+    public InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {
+        return new InstanceMethodsInterceptPoint[]{new PSSetterDefinitionOfJDBCInstrumentation(false)};
     }
 }

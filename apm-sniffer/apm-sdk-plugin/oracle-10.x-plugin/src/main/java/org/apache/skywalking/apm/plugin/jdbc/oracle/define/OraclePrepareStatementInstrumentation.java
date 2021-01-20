@@ -15,8 +15,7 @@
  * limitations under the License.
  *
  */
-
-package io.skywalking.apm.plugin.jdbc.oracle.define;
+package org.apache.skywalking.apm.plugin.jdbc.oracle.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -26,17 +25,16 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.ClassInst
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 import org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch;
 
-import static io.skywalking.apm.plugin.jdbc.oracle.Constants.STATEMENT_INTERCEPT_CLASS;
+import static org.apache.skywalking.apm.plugin.jdbc.oracle.Constants.PREPARED_STATEMENT_INTERCEPT_CLASS;
 import static net.bytebuddy.matcher.ElementMatchers.named;
-
 /**
  * @author liuyansong
  */
-public class OracleStatementInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
+public class OraclePrepareStatementInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 
-    public static final String ENHANCE_CLASS = "oracle.jdbc.driver.OracleStatement";
-    public static final String STATEMENT_WRAPPER_CLASS = "oracle.jdbc.driver.OracleStatementWrapper";
-    public static final String T4C_STATEMENT_CLASS = "oracle.jdbc.driver.T4CStatement";
+    public static final String ENHANCE_CLASS = "oracle.jdbc.driver.OraclePreparedStatement";
+    public static final String PREPARED_STATEMENT_WRAPPER_CLASS = "oracle.jdbc.driver.OraclePreparedStatementWrapper";
+    public static final String T4C_PREPARED_STATEMENT_CLASS = "oracle.jdbc.driver.T4CPreparedStatement";
 
     @Override
     public ConstructorInterceptPoint[] getConstructorsInterceptPoints() {
@@ -52,15 +50,12 @@ public class OracleStatementInstrumentation extends ClassInstanceMethodsEnhanceP
                     return named("execute")
                             .or(named("executeQuery"))
                             .or(named("executeUpdate"))
-                            .or(named("executeLargeUpdate"))
-                            .or(named("executeBatchInternal"))
-                            .or(named("executeUpdateInternal"))
-                            .or(named("executeQuery"));
+                            .or(named("executeLargeUpdate"));
                 }
 
                 @Override
                 public String getMethodsInterceptor() {
-                    return STATEMENT_INTERCEPT_CLASS;
+                    return PREPARED_STATEMENT_INTERCEPT_CLASS;
                 }
 
                 @Override
@@ -73,6 +68,6 @@ public class OracleStatementInstrumentation extends ClassInstanceMethodsEnhanceP
 
     @Override
     protected ClassMatch enhanceClass() {
-        return MultiClassNameMatch.byMultiClassMatch(ENHANCE_CLASS, STATEMENT_WRAPPER_CLASS, T4C_STATEMENT_CLASS);
+        return MultiClassNameMatch.byMultiClassMatch(ENHANCE_CLASS, PREPARED_STATEMENT_WRAPPER_CLASS, T4C_PREPARED_STATEMENT_CLASS);
     }
 }

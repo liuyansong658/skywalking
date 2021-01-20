@@ -15,8 +15,7 @@
  * limitations under the License.
  *
  */
-
-package io.skywalking.apm.plugin.jdbc.oracle.define;
+package org.apache.skywalking.apm.plugin.jdbc.oracle.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -26,7 +25,7 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.ClassInst
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 import org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch;
 
-import static io.skywalking.apm.plugin.jdbc.oracle.Constants.PREPARED_STATEMENT_INTERCEPT_CLASS;
+import static org.apache.skywalking.apm.plugin.jdbc.oracle.Constants.PREPARED_STATEMENT_INTERCEPT_CLASS;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 /**
  * @author liuyansong

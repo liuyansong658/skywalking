@@ -15,8 +15,7 @@
  * limitations under the License.
  *
  */
-
-package io.skywalking.apm.plugin.jdbc.oracle;
+package org.apache.skywalking.apm.plugin.jdbc.oracle;
 
 import java.lang.reflect.Method;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedInstance;
@@ -28,7 +27,7 @@ import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
 /**
  * @author liuyansong
  */
-public class CreateStatementInterceptor implements InstanceMethodsAroundInterceptor {
+public class CreatePreparedStatementInterceptor implements InstanceMethodsAroundInterceptor {
     @Override
     public void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
         MethodInterceptResult result) throws Throwable {
@@ -38,7 +37,7 @@ public class CreateStatementInterceptor implements InstanceMethodsAroundIntercep
     public Object afterMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
         Object ret) throws Throwable {
         if (ret instanceof EnhancedInstance) {
-            ((EnhancedInstance)ret).setSkyWalkingDynamicField(new StatementEnhanceInfos((ConnectionInfo)objInst.getSkyWalkingDynamicField(), "", "Statement"));
+            ((EnhancedInstance)ret).setSkyWalkingDynamicField(new StatementEnhanceInfos((ConnectionInfo)objInst.getSkyWalkingDynamicField(), (String)allArguments[0], "PreparedStatement"));
         }
         return ret;
     }

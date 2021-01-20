@@ -15,8 +15,7 @@
  * limitations under the License.
  *
  */
-
-package io.skywalking.apm.plugin.jdbc.oracle;
+package org.apache.skywalking.apm.plugin.jdbc.oracle;
 
 import java.lang.reflect.Method;
 import org.apache.skywalking.apm.agent.core.context.ContextManager;
@@ -27,6 +26,7 @@ import org.apache.skywalking.apm.agent.core.context.trace.SpanLayer;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedInstance;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.InstanceMethodsAroundInterceptor;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInterceptResult;
+import org.apache.skywalking.apm.plugin.jdbc.PreparedStatementParameterBuilder;
 import org.apache.skywalking.apm.plugin.jdbc.define.StatementEnhanceInfos;
 import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
 
@@ -53,14 +53,15 @@ public class PreparedStatementExecuteMethodsInterceptor implements InstanceMetho
             Tags.DB_STATEMENT.set(span, cacheObject.getSql());
             span.setComponent(connectInfo.getComponent());
 
-            //tarce sql parameters. 
-/*            if(JDBCPluginConfig.Plugin.JDBC.TRACE_SQL_PARAMETERS){
-              Object[] parameters = cacheObject.getParameters();
-              if(parameters!=null && parameters.length>0){
+            //tarce sql parameters.
+/*            Object[] parameters = cacheObject.getParameters();
+            if (objInst instanceof OraclePreparedStatement) {
+                parameters = ((OraclePreparedStatement)objInst).getParameterString();
+            }
+            if (parameters != null && parameters.length > 0) {
                 int maxIndex = cacheObject.getMaxIndex();
                 String parameterString = getParameterString(parameters, maxIndex);
                 SQL_PARAMETERS.set(span, parameterString);
-              }
             }*/
 
             SpanLayer.asDB(span);
@@ -92,11 +93,10 @@ public class PreparedStatementExecuteMethodsInterceptor implements InstanceMetho
         return connectionInfo.getDBType() + "/JDBI/" + statementName + "/" + methodName;
     }
 
-
-/*    private String getParameterString(Object[] parameters, int maxIndex) {
-      return new PreparedStatementParameterBuilder()
-          .setParameters(parameters)
-          .setMaxIndex(maxIndex)
-          .build();
-    }*/
+    private String getParameterString(Object[] parameters, int maxIndex) {
+        return new PreparedStatementParameterBuilder()
+            .setParameters(parameters)
+            .setMaxIndex(maxIndex)
+            .build();
+    }
 }

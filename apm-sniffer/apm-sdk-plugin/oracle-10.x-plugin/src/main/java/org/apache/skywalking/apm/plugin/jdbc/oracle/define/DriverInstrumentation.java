@@ -15,18 +15,19 @@
  * limitations under the License.
  *
  */
+package org.apache.skywalking.apm.plugin.jdbc.oracle.define;
 
-package io.skywalking.apm.plugin.jdbc.oracle.define;
+import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
+import org.apache.skywalking.apm.agent.core.plugin.match.NameMatch;
+import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
 
-import org.apache.skywalking.apm.agent.core.plugin.interceptor.InstanceMethodsInterceptPoint;
-import org.apache.skywalking.apm.plugin.jdbc.PSSetterDefinitionOfJDBCInstrumentation;
 /**
  * @author liuyansong
  */
-public class OraclePrepareStatementSetterInstrumentation extends OraclePrepareStatementInstrumentation {
+public class DriverInstrumentation extends AbstractDriverInstrumentation {
 
     @Override
-    public InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {
-        return new InstanceMethodsInterceptPoint[]{new PSSetterDefinitionOfJDBCInstrumentation(false)};
+    protected ClassMatch enhanceClass() {
+        return NameMatch.byName("oracle.jdbc.driver.OracleDriver");
     }
 }

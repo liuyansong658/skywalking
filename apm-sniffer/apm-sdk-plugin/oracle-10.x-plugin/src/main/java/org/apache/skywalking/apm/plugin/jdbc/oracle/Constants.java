@@ -15,21 +15,13 @@
  * limitations under the License.
  *
  */
-
-
-package io.skywalking.apm.plugin.jdbc.oracle.define;
-
-import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
-import org.apache.skywalking.apm.agent.core.plugin.match.NameMatch;
-import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
+package org.apache.skywalking.apm.plugin.jdbc.oracle;
 
 /**
  * @author liuyansong
  */
-public class DriverInstrumentation extends AbstractDriverInstrumentation {
+public final class Constants {
+    public static final String STATEMENT_INTERCEPT_CLASS = "io.skywalking.apm.plugin.jdbc.oracle.StatementExecuteMethodsInterceptor";
 
-    @Override
-    protected ClassMatch enhanceClass() {
-        return NameMatch.byName("oracle.jdbc.driver.OracleDriver");
-    }
+    public static final String PREPARED_STATEMENT_INTERCEPT_CLASS = "io.skywalking.apm.plugin.jdbc.oracle.PreparedStatementExecuteMethodsInterceptor";
 }
