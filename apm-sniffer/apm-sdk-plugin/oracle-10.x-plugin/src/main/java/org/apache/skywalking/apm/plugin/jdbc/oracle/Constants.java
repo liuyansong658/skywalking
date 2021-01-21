@@ -21,7 +21,7 @@ package org.apache.skywalking.apm.plugin.jdbc.oracle;
  * @author liuyansong
  */
 public final class Constants {
-    public static final String STATEMENT_INTERCEPT_CLASS = "io.skywalking.apm.plugin.jdbc.oracle.StatementExecuteMethodsInterceptor";
+    public static final String STATEMENT_INTERCEPT_CLASS = "org.apache.skywalking.apm.plugin.jdbc.oracle.StatementExecuteMethodsInterceptor";
 
-    public static final String PREPARED_STATEMENT_INTERCEPT_CLASS = "io.skywalking.apm.plugin.jdbc.oracle.PreparedStatementExecuteMethodsInterceptor";
+    public static final String PREPARED_STATEMENT_INTERCEPT_CLASS = "org.apache.skywalking.apm.plugin.jdbc.oracle.PreparedStatementExecuteMethodsInterceptor";
 }

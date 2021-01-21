@@ -33,9 +33,9 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
  * {@link ConnectionInstrumentation} define that the oracle plugin intercept the following methods that the class which
  * extend oracle.jdbc.driver.PhysicalConnection
  *
- * 1. Enhance <code>prepareStatement</code> by <code>io.skywalking.apm.plugin.jdbc.oracle.CreatePreparedStatementInterceptor</code>
- * 2. Enhance <code>prepareCall</code> by <code>io.skywalking.apm.plugin.jdbc.oracle.CreateCallableInterceptor</code>
- * 3. Enhance <code>createStatement</code> by <code>io.skywalking.apm.plugin.jdbc.oracle.CreateStatementInterceptor</code>
+ * 1. Enhance <code>prepareStatement</code> by <code>org.apache.skywalking.apm.plugin.jdbc.oracle.CreatePreparedStatementInterceptor</code>
+ * 2. Enhance <code>prepareCall</code> by <code>org.apache.skywalking.apm.plugin.jdbc.oracle.CreateCallableInterceptor</code>
+ * 3. Enhance <code>createStatement</code> by <code>org.apache.skywalking.apm.plugin.jdbc.oracle.CreateStatementInterceptor</code>
  * 4. Enhance <code>commit, rollback, close, releaseSavepoint</code> by <code>org.apache.skywalking.apm.plugin.jdbc.define.ConnectionServiceMethodInterceptor</code>
  *
  * @author liuyansong
@@ -43,9 +43,9 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 public class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 
     public static final String ENHANCE_CLASS = "oracle.jdbc.driver.PhysicalConnection";
-    public static final String PREPARED_STATEMENT_INTERCEPT_CLASS = "io.skywalking.apm.plugin.jdbc.oracle.CreatePreparedStatementInterceptor";
-    public static final String CALLABLE_INTERCEPT_CLASS = "io.skywalking.apm.plugin.jdbc.oracle.CreateCallableInterceptor";
-    public static final String CREATE_STATEMENT_INTERCEPT_CLASS = "io.skywalking.apm.plugin.jdbc.oracle.CreateStatementInterceptor";
+    public static final String PREPARED_STATEMENT_INTERCEPT_CLASS = "org.apache.skywalking.apm.plugin.jdbc.oracle.CreatePreparedStatementInterceptor";
+    public static final String CALLABLE_INTERCEPT_CLASS = "org.apache.skywalking.apm.plugin.jdbc.oracle.CreateCallableInterceptor";
+    public static final String CREATE_STATEMENT_INTERCEPT_CLASS = "org.apache.skywalking.apm.plugin.jdbc.oracle.CreateStatementInterceptor";
     public static final String T4C_CONNECTION_CLASS = "oracle.jdbc.driver.T4CConnection";
 
     @Override
